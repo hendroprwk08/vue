@@ -1,0 +1,68 @@
+<html>
+
+<head>
+    <title>Uji Coba Vue JS | Hendro Purwoko</title>
+    <script src="js/vue.min.js"></script>
+    <!-- https://vuejs.org/v2/guide/installation.html -->
+
+    <script src='js/axios.min.js'></script>
+    <!-- https://github.com/axios/axios u/ API-->
+</head>
+
+<body>
+    <div id="app">
+        Pesan dari data: {{ message }}
+        <h3>Data Binding 1 Jalur</h3>
+        <input type="text" v-model:value="message" />
+    </div>
+
+    <div id="api">
+        <h3>Tarik data melalui API</h3>
+        <table border="1">
+            <th>Code</th>
+            <th>Rate</th>
+            <th>Rate Float</th>
+            <th>Description</th>
+            <tr v-for='bpi in bpis'>
+                <td>{{ bpi.code }} </td>
+                <td>{{ bpi.rate }}</td>
+                <td>{{ bpi.rate_float }}</td>
+                <td>{{ bpi.description }}</td>
+            </tr>
+        </table>
+    </div>
+
+</body>
+<script>
+    var app = new Vue({
+        el: "#app",
+        data: {
+            message: "Baru belajar vue"
+        }
+    });
+
+    var api = new Vue({
+        el: "#api",
+        data: {
+            bpis: ""
+        },
+        methods: {
+            getRecords: function() {
+                axios
+                    .get('https://api.coindesk.com/v1/bpi/currentprice.json')
+                    .then(response => {
+                        this.bpis = response.data.bpi;
+                        console.log(this.bpis);
+                    })
+                    .catch(function(error) {
+                        console.log(error);
+                    });
+            },
+        },
+        created: function() {
+            this.getRecords();
+        }
+    });
+</script>
+
+</html>
