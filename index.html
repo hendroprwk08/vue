@@ -18,6 +18,7 @@
 
     <div id="api">
         <h3>Tarik data melalui API</h3>
+        <img v-show="!visible" src="image/rolling.gif" />
         <table border="1">
             <th>Code</th>
             <th>Rate</th>
@@ -44,7 +45,8 @@
     var api = new Vue({
         el: "#api",
         data: {
-            bpis: ""
+            bpis: "",
+            visible: false
         },
         methods: {
             getRecords: function() {
@@ -52,7 +54,9 @@
                     .get('https://api.coindesk.com/v1/bpi/currentprice.json')
                     .then(response => {
                         this.bpis = response.data.bpi;
-                        console.log(this.bpis);
+
+                        if (this.bpis != "")
+                            this.visible = true;
                     })
                     .catch(function(error) {
                         console.log(error);
